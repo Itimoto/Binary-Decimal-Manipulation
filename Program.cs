@@ -21,6 +21,7 @@ namespace Binary_Decimal_Manipulation
             */
             try
             {
+         Reset:
                 int valA = 0; //This is going to be the first value
                 int valB = 0; //This is going to be the second value; if subtracting, it will be the subtractend
                 int bitWidth = 4; //This is going to be the bit width of the adder/subtractor
@@ -30,7 +31,8 @@ namespace Binary_Decimal_Manipulation
                 int[] binOutput = new int[bitWidth + 2]; //This array will store the binary output of the selected operation, with the length of the bit width + 2
 
                 int finBinOut = 0; //This will store the Finalized Binary Output of the adder, to be shown later
-
+                int decOutput = 0; //This will store the value of the Decimal Output, shown at the very end of the program
+                
                 Console.WriteLine("Welcome!"); //Welcome Code
                 Console.WriteLine("Would you like to Add or Subtract?");
                 Console.WriteLine("If Subtracting, Please Put 'true'");
@@ -153,8 +155,28 @@ namespace Binary_Decimal_Manipulation
 
                 //Taking array information in binOutput and combining it into finBinOut.
                 combineBin(ref binOutput, ref finBinOut, bitWidth, overflow, subtract); //Combine the values in binOutput and place the output into finBinOut
-                binDec(); //Convert the binary output to decimal
+                binDec(ref binOutput, ref decOutput, bitWidth, overflow); //Convert the binary output to decimal
 
+                Console.WriteLine(); //Aesthetically pleasing space
+                Console.WriteLine("Finished All Functions...");
+                Console.WirteLine("Binary Output is " + finBinOut); //Show final binary output
+                Console.WriteLine("Decimal Output is " + decOutput); //Show final decimal output
+                Console.WriteLine(); //Aesthetically pleasing space
+                
+                Console.WriteLine("Would you like to Add/Subtract Again?"); //Propose a 'reset' switch
+                
+                if (Console.ReadKey() == "y")
+                {
+                    
+                    goto Reset; 
+                    
+                } else
+                {
+                 
+                    Console.WriteLine("Press any key to close the program...");
+                    
+                }
+                
                 Console.ReadKey();
 
             }
