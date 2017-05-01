@@ -35,20 +35,20 @@ namespace Binary_Decimal_Manipulation
                 
                 Console.WriteLine("Welcome!"); //Welcome Code
                 Console.WriteLine("Would you like to Add or Subtract?");
-                Console.WriteLine("If Subtracting, Please Put 'true'");
-                Console.WriteLine("Otherwise, put 'false'");
-                Console.WriteLine("Please note that your input will be case-sensitive"); //Yes, it is case-sensitive. I've tested it.
-
+                Console.WriteLine("If Subtracting, Please Put 'y'");
+                Console.WriteLine("Otherwise, put 'n'");
+                
+         addSub: //Label for human-error prevention
                 string subtractTrue = Console.ReadLine(); //Assign input to variable 'subtractTrue'
                 int subtract = 0; //Subtract needs to be an integer, as it will be used as a numerical input in the Adding stage of the program.
 
-                if (subtractTrue == "true") //If the user wants to subtract the two values, then:
+                if (subtractTrue == "y" || subtractTrue == "Y") //If the user wants to subtract the two values, then:
                 {
 
                     subtract = 1; //The value that will be used in the subtracting stage is assigned
 
                 }
-                else if (subtractTrue == "false") //If the user wants to add the two values, the:
+                else if (subtractTrue == "n" || subtractTrue == "N") //If the user wants to add the two values, the:
                 {
 
                     subtract = 0; //The value that will be used in the subtracting stage will be disabled, effectively disabling the rest of the subtracting process.
@@ -57,24 +57,25 @@ namespace Binary_Decimal_Manipulation
                 else
                 {
 
-                    Console.WriteLine("G'ah. Silly Human. The program won't work now."); //Human Error; if user doesn't input a valid response, this is thrown.
-                    Console.WriteLine("Press any key to continue...");
-                    Console.ReadKey(); //Wait for Silly User to continue with the program that 'won't work now'
-                                       //Just kidding. It'll just add them instead of subtracting them.
+                    Console.WriteLine("You did not type a viable input"); //Human Error; if user doesn't input a valid response, this is thrown.
+                    Console.WriteLine("Would you like to subtract?");
+                    Console.WriteLine("Please specify (y)es or (n)o");
+                    Console.WriteLine();
+                    goto addSub;
 
                 }
 
                 Console.WriteLine(); //Aesthetically pleasing space.
                 Console.WriteLine("Now, please input your two values"); //Inform user of choices
                 Console.WriteLine("These two values must be integers"); //Specify the limits of the program
-                Console.WriteLine("Please input the first value, which should be less than 2^31, or 2147483648"); //Declare the obvious
+                Console.WriteLine("Please input the first value, which should be less than 2^32, or [INFOMISSING]"); //Declare the obvious
 
                 valA = Int32.Parse(Console.ReadLine()); //Convert the input into a workable integer instead of a string, because you can't add strings.
                 Console.WriteLine("Thank You"); //Aesthetically pleasing 'thank you'
 
-                Console.WriteLine(""); //Aesthetically pleasing space.
+                Console.WriteLine(); //Aesthetically pleasing space.
 
-                Console.WriteLine("Now, please input the second value, which should be less than 2^31, or 2147483648"); //Declare the obvious, part two.
+                Console.WriteLine("Now, please input the second value, which should be less than 2^32, or [INFOMISSING]"); //Declare the obvious, part two.
                 if (subtract == 1) //If the user specified wanted to subtract, then show:
                 {
 
@@ -163,17 +164,17 @@ namespace Binary_Decimal_Manipulation
                 Console.WriteLine("Decimal Output is " + decOutput); //Show final decimal output
                 Console.WriteLine(); //Aesthetically pleasing space
                 
-                Console.WriteLine("Would you like to Add/Subtract Again?"); //Propose a 'reset' switch
+                Console.WriteLine("Would you like to Add/Subtract Again? (Y/n)"); //Propose a 'reset' switch
                 
-                if (Console.ReadKey() == "y")
+                if (Console.ReadKey() == "y") //User types wants to reset...
                 {
                     
-                    goto Reset; 
+                    goto Reset; //Reset the program
                     
-                } else
+                } else //User either doesn't care or types in 'n'
                 {
                  
-                    Console.WriteLine("Press any key to close the program...");
+                    Console.WriteLine("Press any key to close the program..."); //Inform the user that they can kill the program
                     
                 }
                 
