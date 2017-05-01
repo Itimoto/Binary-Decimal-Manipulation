@@ -153,7 +153,7 @@ namespace Binary_Decimal_Manipulation
 
                 //Taking array information in binOutput and combining it into finBinOut.
                 combineBin(ref binOutput, ref finBinOut, bitWidth, overflow, subtract); //Combine the values in binOutput and place the output into finBinOut
-                Console.WriteLine(finBinOut);
+                binDec(); //Convert the binary output to decimal
 
                 Console.ReadKey();
 
@@ -241,7 +241,7 @@ namespace Binary_Decimal_Manipulation
             }
 
         Finish: //When a program is done before the 'While' loop is over, then:
-            Console.WriteLine("Completed Binary Conversion"); //Notify the user of what's happened
+            Console.WriteLine("...Completed Binary Conversion"); //Notify the user of what's happened
             Console.WriteLine("Binary Output:"); //Inform the user of what they're seeing
             for (int i = 0; i < bitWidth; i++) //Aesthetically pleasing looping array values (TM)
             {
@@ -372,12 +372,12 @@ namespace Binary_Decimal_Manipulation
             if (overflow == false) //If there is no overflow, then:
             {
 
-                powerOfTwo = bitWidth; //The maximum place value will be the size of the bit width
+                powerOfTwo = bitWidth - 1; //The maximum place value will be the size of the bit width
 
             } else //If there is an overflow, then:
             {
 
-                powerOfTwo = bitWidth + 1; //The maximum place value will be the size of the bit width + 1, to accomodate the overflow
+                powerOfTwo = bitWidth; //The maximum place value will be the size of the bit width + 1, to accomodate the overflow
 
             }
 
@@ -404,13 +404,45 @@ namespace Binary_Decimal_Manipulation
             if (subtract == 1 && overflow == true) //If the user chose to subtract:
             {
 
-                binOutput = -1*((int)Math.Pow(10, bitWidth + 1) - binOutput); //I still have no idea what this does.
+                binOutput = -1*((int)Math.Pow(10, bitWidth) - binOutput); //I still have no idea what this does.
                 binInput[bitWidth + 1] = 0; //Set overflow to 0
 
             }
 
             Console.WriteLine("...Done");
 
+        }
+        
+        public static void binDec(ref int[] binInput, ref int decOutput, int bitWidth, bool overflow)
+        {
+            
+            //This function will convert a binary input into a decimal ouutput
+            Console.WriteLine("Converting binary values into a decimal value...");
+            
+            int powerOfTwo = 0; //powerOfTwo will store the running power that the bit will be converted to
+            
+            if (overflow == false) //If there's no overflow, then:
+            {
+             
+                powerOfTwo = bitWidth - 1;   //There will be no cycle for an overflow bit
+                
+            } else //Otherwise,
+            {
+                
+                powerOfTwo = bitWidth; //There will be a cycle for an overflow bit
+                
+            }
+            
+            while (powerOfTwo > 0) //While there are still remaining cycles,
+            {
+                
+                decOutput = decOutput + (binInput[powerOfTwo]*((int)Math.Pow(2,powerOfTwo))) //The decimal output
+                
+            }
+            
+            Console.WriteLine("...Done");
+            
+            
         }
 
     }
