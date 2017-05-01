@@ -1,0 +1,170 @@
+:"Dae is Bae
+:"RIPADD Decimal, Version 1.5
+:"RIPADD is based on the way computers add numbers on the transistor level
+
+Disp "RipAddv1.5","Welcome","","Add or Subtract?","If Subtracting,","Put 1","","Otherwise, put 0"
+0→S
+Prompt S
+Disp "","Input Numbers","That Are"," ≤ 2^31","","(2147483648)",""
+
+Prompt A
+Prompt B
+
+:"Human-Error Fixer-Upper (TM)
+If S>1:1→S
+If S<0:0→S
+
+Disp "Beginning Conversion","Conv. A"
+A→Z
+1→O
+:"Convert Bin-Dec
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}→L₁
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}→L₂
+Lbl A
+0→Q
+
+While Z>0
+If Z=1:Then
+:If O=1:1→L₁(1)
+:If O=2:1→L₂(1)
+:Disp "Input Sector","1"
+:0→Z
+:Goto Y
+End
+
+If (2^Q)=Z:Then
+:If O=1:1→L₁(Q+1)
+:If O=2:1→L₂(Q+1)
+:0→Q
+:0→Z
+:Disp "Power of 2 Found"
+:Disp "Input Sector",Q+1
+:Goto Y
+End
+
+If (2^Q)>Z:Then
+:Z-(2^(Q-1))→Z
+:If O=1:1→L₁(Q)
+:If O=2:1→L₂(Q)
+:Disp "Input Sector",Q
+:0→Q
+End
+Q+1→Q
+End
+Lbl Y
+If 1=O:Then:
+:2→O
+:Disp "Finished A","Conv. B"
+:B→Z
+:Goto A
+End
+:"End Bin-Dec
+
+If S=1:Then
+:Disp "INVTNG..."
+For(I,1,32)
+:L₂(I) xor S→L₂(I)
+End
+:Disp "...Done"
+End
+
+Disp "A"
+For(I,1,32)
+:Disp L₁(I)
+End
+
+Disp "B"
+For(I,1,32)
+:Disp L₂(I)
+End
+
+:"Getting Ready for Finals
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}→L₃
+
+:"Iterative Usage
+1→J
+S→I
+
+:"REPLACE I=1 with I!=1
+
+Lbl X
+
+
+:L₁(J)→A
+:L₂(J)→B
+
+
+:"Beginning Adder Function
+Disp "Adding"
+Disp "..."
+
+0→C
+0→D
+0→E
+0→X
+0→Y
+If A xor B
+1→C
+If I xor C
+1→X
+If A and B
+1→D
+If I and C
+1→E
+If D or E
+1→Y
+Disp "Out"
+Disp X
+Disp "C Out"
+Disp Y
+Y→I
+X→L₃(J)
+
+If J<32:Then
+:J+1→J
+:Goto X
+End
+
+If Y>0:Disp "OVERFLOW"
+
+Y→L₃(33)
+If L₃(33)=1:Then
+:33→H
+Else
+:32→H
+End
+
+:"Putting Workable info into Readable Info
+
+0→X
+While H>0
+X+(L₃(H)*(10^(H-1)))→X
+H-1→H
+End
+DelVar H
+
+:"Getting Rid of Overflow
+
+If S=1 and L₃(33):Then
+­1(10000-X)→X:0→L₃(33):End
+Disp "BIN OUT"
+Disp X
+Disp "CONV-DEC"
+If L₃(33)=1
+Then
+33→H
+Else
+32→H
+End
+
+:"Converting Binary into Decimal
+
+0→X
+While H>0
+X+(L₃(H)*(2^(H-1)))→X
+H-1→H
+End
+
+
+Disp "Decimal Out"
+Disp X
