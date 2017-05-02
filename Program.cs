@@ -10,172 +10,166 @@ namespace Binary_Decimal_Manipulation
     {
         static void Main(string[] args)
         {
-            //Dae is Bae
+        //Dae is Bae
 
-            //RipAdd Decimal, Version 1.6
-            //RipAdd is based on the way computers add numbers on the logic gate level
-            //This program was originally written in TI-BASIC, for the TI-84
-            //Modifications to code will be written here:
-            /*  
-             *  4.30.17: Took out special case (2^0 or 1) in function decBin
-            */
-            try
+        //RipAdd Decimal, Version 1.6
+        //RipAdd is based on the way computers add numbers on the logic gate level
+        //This program was originally written in TI-BASIC, for the TI-84
+        //Modifications to code will be written here:
+        /*  
+         *  4.30.17: Took out special case (2^0 or 1) in function decBin
+        */
+        //try
+        //{
+        Reset:
+            int valA = 0; //This is going to be the first value
+            int valB = 0; //This is going to be the second value; if subtracting, it will be the subtractend
+            int bitWidth = 32; //This is going to be the bit width of the adder/subtractor
+
+            int[] binA = new int[bitWidth]; //This array will store the binary value of A, with the length of bit width
+            int[] binB = new int[bitWidth]; //This array will store the binary value of B, with the lenght of bit width
+            int[] binOutput = new int[bitWidth + 2]; //This array will store the binary output of the selected operation, with the length of the bit width + 2
+
+            int finBinOut = 0; //This will store the Finalized Binary Output of the adder, to be shown later
+            int decOutput = 0; //This will store the value of the Decimal Output, shown at the very end of the program
+
+            Console.WriteLine("Welcome!"); //Welcome Code
+            Console.WriteLine("Would you like to Add or Subtract?");
+            Console.WriteLine("If Subtracting, Please Put (y)es");
+            Console.WriteLine("Otherwise, put (n)o");
+
+        addSub: //Label for human-error prevention
+            string subtractTrue = Console.ReadLine(); //Assign input to variable 'subtractTrue'
+            int subtract = 0; //Subtract needs to be an integer, as it will be used as a numerical input in the Adding stage of the program.
+
+            if (subtractTrue == "y" || subtractTrue == "Y" || subtractTrue == "Yes" || subtractTrue == "yes") //If the user wants to subtract the two values, then:
             {
-            Reset:
-                int valA = 0; //This is going to be the first value
-                int valB = 0; //This is going to be the second value; if subtracting, it will be the subtractend
-                int bitWidth = 32; //This is going to be the bit width of the adder/subtractor
 
-                int[] binA = new int[bitWidth]; //This array will store the binary value of A, with the length of bit width
-                int[] binB = new int[bitWidth]; //This array will store the binary value of B, with the lenght of bit width
-                int[] binOutput = new int[bitWidth + 2]; //This array will store the binary output of the selected operation, with the length of the bit width + 2
+                subtract = 1; //The value that will be used in the subtracting stage is assigned
 
-                int finBinOut = 0; //This will store the Finalized Binary Output of the adder, to be shown later
-                int decOutput = 0; //This will store the value of the Decimal Output, shown at the very end of the program
+            }
+            else if (subtractTrue == "n" || subtractTrue == "N" || subtractTrue == "No" || subtractTrue == "no") //If the user wants to add the two values, the:
+            {
 
-                Console.WriteLine("Welcome!"); //Welcome Code
-                Console.WriteLine("Would you like to Add or Subtract?");
-                Console.WriteLine("If Subtracting, Please Put 'y'");
-                Console.WriteLine("Otherwise, put 'n'");
+                subtract = 0; //The value that will be used in the subtracting stage will be disabled, effectively disabling the rest of the subtracting process.
 
-            addSub: //Label for human-error prevention
-                string subtractTrue = Console.ReadLine(); //Assign input to variable 'subtractTrue'
-                int subtract = 0; //Subtract needs to be an integer, as it will be used as a numerical input in the Adding stage of the program.
+            }
+            else
+            {
 
-                if (subtractTrue == "y" || subtractTrue == "Y") //If the user wants to subtract the two values, then:
-                {
+                Console.WriteLine("You did not type a viable input"); //Human Error; if user doesn't input a valid response, this is thrown.
+                Console.WriteLine("Would you like to subtract?");
+                Console.WriteLine("Please specify (y)es or (n)o");
+                Console.WriteLine();
+                goto addSub;
 
-                    subtract = 1; //The value that will be used in the subtracting stage is assigned
+            }
 
-                }
-                else if (subtractTrue == "n" || subtractTrue == "N") //If the user wants to add the two values, the:
-                {
+            Console.WriteLine(); //Aesthetically pleasing space.
+            Console.WriteLine("Now, please input your two values"); //Inform user of choices
+            Console.WriteLine("These two values must be integers"); //Specify the limits of the program
+            Console.WriteLine("Please input the first value, which should be less than 2^32, or 4,294,967,295"); //Declare the obvious
 
-                    subtract = 0; //The value that will be used in the subtracting stage will be disabled, effectively disabling the rest of the subtracting process.
+            valA = Int32.Parse(Console.ReadLine()); //Convert the input into a workable integer instead of a string, because you can't add strings.
+            Console.WriteLine("Thank You"); //Aesthetically pleasing 'thank you'
 
-                }
-                else
-                {
+            Console.WriteLine(); //Aesthetically pleasing space.
 
-                    Console.WriteLine("You did not type a viable input"); //Human Error; if user doesn't input a valid response, this is thrown.
-                    Console.WriteLine("Would you like to subtract?");
-                    Console.WriteLine("Please specify (y)es or (n)o");
-                    Console.WriteLine();
-                    goto addSub;
+            Console.WriteLine("Now, please input the second value, which should be less than 2^32, or 4,294,967,295"); //Declare the obvious, part two.
+            if (subtract == 1) //If the user specified wanted to subtract, then show:
+            {
 
-                }
-
-                Console.WriteLine(); //Aesthetically pleasing space.
-                Console.WriteLine("Now, please input your two values"); //Inform user of choices
-                Console.WriteLine("These two values must be integers"); //Specify the limits of the program
-                Console.WriteLine("Please input the first value, which should be less than 2^32, or 4,294,967,295"); //Declare the obvious
-
-                valA = Int32.Parse(Console.ReadLine()); //Convert the input into a workable integer instead of a string, because you can't add strings.
-                Console.WriteLine("Thank You"); //Aesthetically pleasing 'thank you'
-
-                Console.WriteLine(); //Aesthetically pleasing space.
-
-                Console.WriteLine("Now, please input the second value, which should be less than 2^32, or 4,294,967,295"); //Declare the obvious, part two.
-                if (subtract == 1) //If the user specified wanted to subtract, then show:
-                {
-
-                    Console.WriteLine(); //Aesthetically pleasing space
-                    Console.WriteLine("Since you have selected the subtraction method,"); //The obvious
-                    Console.WriteLine("You should treat this value is if it were negative"); //How the user should plan on subtracting said numbers
-                    Console.WriteLine("Also, please don't input a value that will result in a negative value"); //Inform user of limitations
-                    Console.WriteLine("This program uses unsigned binary, so the output will always be positive"); //Inform user of why there are limitations
-                    Console.WriteLine("As such, the output will be wrong if the the desired result is negative"); //Warn user of exceeding limiations
-
-                }
-
-                valB = Int32.Parse(Console.ReadLine()); //Convert input into a workable integer again, but for value B
-                Console.WriteLine(); //Aesthetically pleasing space.
-                Console.WriteLine("Thank You"); //Aesthetically pleasing 'thank you'
-
-                decBin(valA, binA, bitWidth); //Convert (decimal) value A (valA) into binary value A, then store in Array 'binA'
-                decBin(valB, binB, bitWidth); //Convert (decimal) value B (valB) into binary value A, then store in Array 'binB'
                 Console.WriteLine(); //Aesthetically pleasing space
+                Console.WriteLine("Since you have selected the subtraction method,"); //The obvious
+                Console.WriteLine("You should treat this value is if it were negative"); //How the user should plan on subtracting said numbers
+                Console.WriteLine("Also, please don't input a value that will result in a negative value"); //Inform user of limitations
+                Console.WriteLine("This program uses unsigned binary, so the output will always be positive"); //Inform user of why there are limitations
+                Console.WriteLine("As such, the output will be wrong if the the desired result is negative"); //Warn user of exceeding limiations
 
-                //Preparation for Subtraction
+            }
 
-                if (subtract == 1) //If the user wants to subtract, then:
+
+            valB = Int32.Parse(Console.ReadLine()); //Convert input into a workable integer again, but for value B
+            Console.WriteLine(); //Aesthetically pleasing space.
+            Console.WriteLine("Thank You"); //Aesthetically pleasing 'thank you'
+
+            decBin(valA, binA, bitWidth); //Convert (decimal) value A (valA) into binary value A, then store in Array 'binA'
+            decBin(valB, binB, bitWidth); //Convert (decimal) value B (valB) into binary value A, then store in Array 'binB'
+            Console.WriteLine(); //Aesthetically pleasing space
+
+            //Preparation for Subtraction
+
+            if (subtract == 1) //If the user wants to subtract, then:
+            {
+
+                /* The way that one subtracts two binary numbers is through something known as 'two's complement'
+                 *  Simply put, you invert all of the bits in the number that will be the subtractend (here, it's valB)
+                 *      So, if the input is 1101, then it'll become 0010.
+                 *  Then, you add one.
+                 *      So, 0010 becomes 0011.
+                 *  It's that simple. The inversion occurs directly afterwards.
+                 *  Adding one will occur during the adding stage. As in, the carryIn of the Adder will be equal to the subtract int.
+                 */
+
+                Console.WriteLine("Inverting bits..."); //Notify user of bit inversion
+                for (int i = 0; i <= bitWidth - 1; i++) //Begin loop that inverts bits in array 'binB'
                 {
 
-                    /* The way that one subtracts two binary numbers is through something known as 'two's complement'
-                     *  Simply put, you invert all of the bits in the number that will be the subtractend (here, it's valB)
-                     *      So, if the input is 1101, then it'll become 0010.
-                     *  Then, you add one.
-                     *      So, 0010 becomes 0011.
-                     *  It's that simple. The inversion occurs directly afterwards.
-                     *  Adding one will occur during the adding stage. As in, the carryIn of the Adder will be equal to the subtract int.
-                     */
-
-                    Console.WriteLine("Inverting bits..."); //Notify user of bit inversion
-                    for (int i = 0; i <= bitWidth; i++) //Begin loop that inverts bits in array 'binB'
-                    {
-
-                        binB[i] = binB[i] ^ subtract; /*XOR is used for inverting values;
+                    binB[i] = binB[i] ^ subtract; /*XOR is used for inverting values;
                                                       * For example, if the input is 1, and subtract is 1,
                                                       *     then the output is 0
                                                       * If the input is 0, and subtract is 0, then the 
                                                       *    output is 1
                                                       */
-                        Console.WriteLine(binB[i]); //Show the user what's going on.
-
-                    }
-                    Console.WriteLine("...Done"); //Notify the user of the end of the function
+                    Console.WriteLine(binB[i]); //Show the user what's going on.
 
                 }
+                Console.WriteLine("...Done"); //Notify the user of the end of the function
 
-                //Adding Section:
+            }
 
-                Console.WriteLine("About to start adding..."); //Notify user of what's going on.
+            //Adding Section:
 
-                /*Yes, I know it's bad practice to declare variables at the end, but if you want to make heads or tails of what's going on, 
-                    then this'll be a lot more helpful. */
-                int carryIn = subtract; //The carryIn value will store the value of subtract, for reasons outlined in the second major Subtraction block desc.
-                int carryOut = 0; //carryOut will store the value of carryOut in the function 'add();' (Wow! So creative!)
-                bool overflow = false; //Whether or not there is an overflow dictates the number of cycles in combineBin();
+            Console.WriteLine("About to start adding..."); //Notify user of what's going on.
 
-                for (int i = 0; i < bitWidth; i++) //Repeat the adding process 
-                {
+            /*Yes, I know it's bad practice to declare variables at the end, but if you want to make heads or tails of what's going on, 
+                then this'll be a lot more helpful. */
+            int carryIn = subtract; //The carryIn value will store the value of subtract, for reasons outlined in the second major Subtraction block desc.
+            int carryOut = 0; //carryOut will store the value of carryOut in the function 'add();' (Wow! So creative!)
+            bool overflow = false; //Whether or not there is an overflow dictates the number of cycles in combineBin();
 
-                    add(binA[i], binB[i], ref carryIn, ref carryOut, ref binOutput[i]); //Add corresponding binary places, with the variable carryIn
-                    carryIn = carryOut; //carryOut becomes carryIn, as with any Ripple Adder (hence the original name)
+            for (int i = 0; i < bitWidth; i++) //Repeat the adding process 
+            {
 
-                }
+                add(binA[i], binB[i], ref carryIn, ref carryOut, ref binOutput[i]); //Add corresponding binary places, with the variable carryIn
+                carryIn = carryOut; //carryOut becomes carryIn, as with any Ripple Adder (hence the original name)
 
-                binOutput[bitWidth + 1] = carryOut; //Possible overflow bit is stored in last place
-                if (binOutput[bitWidth + 1] == 1) //If there is overflow
-                {
+            }
 
-                    Console.WriteLine("OVERFLOW"); //Display the fact that there is overflow
-                    overflow = true; //Set overflow boolean for use with combinBin();
+            binOutput[bitWidth + 1] = carryOut; //Possible overflow bit is stored in last place
+            if (binOutput[bitWidth + 1] == 1) //If there is overflow
+            {
 
-                }
+                Console.WriteLine("OVERFLOW"); //Display the fact that there is overflow
+                overflow = true; //Set overflow boolean for use with combinBin();
 
-                //Taking array information in binOutput and combining it into finBinOut.
-                combineBin(ref binOutput, ref finBinOut, bitWidth, overflow, subtract); //Combine the values in binOutput and place the output into finBinOut
-                binDec(ref binOutput, ref decOutput, bitWidth, overflow); //Convert the binary output to decimal
+            }
 
-                for(int i = 0; i <= bitWidth; i++)
-                {
+            //Taking array information in binOutput and combining it into finBinOut.
+            combineBin(ref binOutput, ref finBinOut, bitWidth, overflow, subtract); //Combine the values in binOutput and place the output into finBinOut
+            binDec(ref binOutput, ref decOutput, bitWidth, overflow); //Convert the binary output to decimal
 
-                    Console.WriteLine(binOutput[i]);
+            Console.WriteLine(); //Aesthetically pleasing space
+            Console.WriteLine("Finished All Functions...");
+            Console.WriteLine("Binary Output is " + finBinOut); //Show final binary output
+            Console.WriteLine("Decimal Output is " + decOutput); //Show final decimal output
+            Console.WriteLine(); //Aesthetically pleasing space
 
-                }
+            Console.WriteLine("Would you like to Add/Subtract Again? (Y/n)"); //Propose a 'reset' switch
 
-                Console.WriteLine(); //Aesthetically pleasing space
-                Console.WriteLine("Finished All Functions...");
-                Console.WriteLine("Binary Output is " + finBinOut); //Show final binary output
-                Console.WriteLine("Decimal Output is " + decOutput); //Show final decimal output
-                Console.WriteLine(); //Aesthetically pleasing space
+            string resetYN = Console.ReadLine();
 
-                Console.WriteLine("Would you like to Add/Subtract Again? (Y/n)"); //Propose a 'reset' switch
-
-                string resetYN = Console.ReadLine();
-
-                if (resetYN == "y" || resetYN == "Y") //User types wants to reset...
+            if (resetYN == "y" || resetYN == "Y" || resetYN == "Yes" || resetYN == "yes") //User types wants to reset...
                 {
 
                     goto Reset; //Reset the program
@@ -190,17 +184,17 @@ namespace Binary_Decimal_Manipulation
 
                 Console.ReadKey();
 
-            }
+            //}
 
 
-            catch (Exception ex) //If a bug occurs, then:
+            /*catch (Exception ex) //If a bug occurs, then:
             {
 
                 Console.WriteLine("Oops! Something went wrong."); //Inform user that they should do something
                 Console.WriteLine("Press any key to close the program."); //Oh, wait; this is something.
                 Console.ReadKey();
 
-            }
+            }*/
 
 
         }
@@ -260,7 +254,7 @@ namespace Binary_Decimal_Manipulation
                                                                       //greater than the input value, the one before it is less, leaving us with workable (non-negative)
                                                                       //information. For example: 8 (2^3) is greater than the input 5. So, 2^2 (or 2^(3-1)) is 4, which
                                                                       //IS less than 5. So, we'll subtract 4 from 5, and be left with 1 to continue sifting through.
-                    binArray[powerOfTwo - 1] = 1; //Input '1' into the necessary place
+                    binArray[(powerOfTwo - 1)] = 1; //Input '1' into the necessary place
                     Console.WriteLine("Input in place value " + (powerOfTwo - 1)); //Notify user of input (just for Aesthetic)
                     powerOfTwo = 0; //Reset the powerOfTwo variable to continue the cycle.
 
@@ -400,6 +394,7 @@ namespace Binary_Decimal_Manipulation
             // it inside of binOutput. The process is described more in detail further on.
 
             Console.WriteLine("Combining Binary Values into single Variable...");
+            int subtractOverflow = 0; //This will store the value of the 'subtract overflow' variable, which will be used to dispose of an overflow val
 
             int powerOfTwo = 0; //This variable will store the 'place value' where the given value will be deposited
 
@@ -413,6 +408,13 @@ namespace Binary_Decimal_Manipulation
             {
 
                 powerOfTwo = bitWidth; //The maximum place value will be the size of the bit width + 1, to accomodate the overflow
+
+            }
+
+            if (subtract == 1 && overflow == true)
+            {
+
+                binInput[bitWidth + 1] = 0; //Set overflow to 0 for subtraction operations
 
             }
 
@@ -432,15 +434,9 @@ namespace Binary_Decimal_Manipulation
                  *      multiply it by 1000 (or 10^3), and deposit it into binOutput (10000+0+10+1)
                  *  Now, print it. We'll get 1,011, exactly what we're expecting.
                  */
+                subtractOverflow += (int)Math.Pow(10, (powerOfTwo)); //Prepares for subtracting 11111... from binOutput's overflow bit w/ subtraction on
                 powerOfTwo--; //decrement the value
 
-            }
-
-            if (subtract == 1 && overflow == true) //If the user chose to subtract:
-            {
-
-                binOutput = -1 * ((int)Math.Pow(10, bitWidth) - binOutput); //I still have no idea what this does.
-                binInput[bitWidth + 1] = 0; //Set overflow to 0
 
             }
 
@@ -469,7 +465,7 @@ namespace Binary_Decimal_Manipulation
 
             }
 
-            while (powerOfTwo > 0) //While there are still remaining cycles,
+            while (powerOfTwo >= 0) //While there are still remaining cycles,
             {
 
                 decOutput = decOutput + (binInput[powerOfTwo] * ((int)Math.Pow(2, powerOfTwo))); //The decimal output
@@ -478,6 +474,7 @@ namespace Binary_Decimal_Manipulation
             }
 
             Console.WriteLine("...Done");
+
 
 
         }
