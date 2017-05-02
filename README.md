@@ -17,3 +17,9 @@ The program is capable of adding/subtracting numbers less than 2^(bitWidth) - 1.
 <p>If you input 'yes', 'Yes', 'y', or 'Y', then the program will start again, all of the variables will be cleared, and you can add/subtract again. If you input anything other than that, then you will see this:</p>
 <p><i>Press any key to exit the program</i></p>
 <p>In which case, you will just press a key to exit the program.</p>
+
+<h1>Explanation</h1>
+<p>If you don't understand what my boatload of comments mean, but want to know how this works, then <em>this</em> is the section for you!</p>
+<p>In summary, <i>Main()</i> takes in inputs A and B, then places it into the function <i>decBin()</i> to convert the Decimal input to Binary. Then, if the user decides to subtract, a small function inside of <i>Main()</i> will invert the bits of the (converted Binary) Input B. Then, the program will add the two (now arrays) into a for() loop with the <i>add()</i> function inside. If the user chose to subtract, then 1 will be put into the carryIn of the <i>add()</i> function by law of two's complement. After the output of <i>add()</i> is stored in binOut[], the values stored within are taken and combined into a single number for easiy display on the console by running it through the function <i>combinBin()</i>. After this, the values of binOut[] are converted into a decimal output by running it through the function <i>binDec()</i> Finally, both the Binary and the Decimal output are displayed on the console via <i>Main()</i> In the end, you, the user, are given a choice between adding/subtracting again or exiting the program. There is a label inside of <i>Main()</i> called 'Reset:' to which the program will 'goto' if the user decides so.</p>
+<!--<h3>How <i>decBin()</i> Works</h3>
+<p></p>-->
