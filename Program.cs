@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,10 +21,10 @@ namespace Binary_Decimal_Manipulation
             */
             try
             {
-         Reset:
+            Reset:
                 int valA = 0; //This is going to be the first value
                 int valB = 0; //This is going to be the second value; if subtracting, it will be the subtractend
-                int bitWidth = 4; //This is going to be the bit width of the adder/subtractor
+                int bitWidth = 32; //This is going to be the bit width of the adder/subtractor
 
                 int[] binA = new int[bitWidth]; //This array will store the binary value of A, with the length of bit width
                 int[] binB = new int[bitWidth]; //This array will store the binary value of B, with the lenght of bit width
@@ -32,13 +32,13 @@ namespace Binary_Decimal_Manipulation
 
                 int finBinOut = 0; //This will store the Finalized Binary Output of the adder, to be shown later
                 int decOutput = 0; //This will store the value of the Decimal Output, shown at the very end of the program
-                
+
                 Console.WriteLine("Welcome!"); //Welcome Code
                 Console.WriteLine("Would you like to Add or Subtract?");
                 Console.WriteLine("If Subtracting, Please Put 'y'");
                 Console.WriteLine("Otherwise, put 'n'");
-                
-         addSub: //Label for human-error prevention
+
+            addSub: //Label for human-error prevention
                 string subtractTrue = Console.ReadLine(); //Assign input to variable 'subtractTrue'
                 int subtract = 0; //Subtract needs to be an integer, as it will be used as a numerical input in the Adding stage of the program.
 
@@ -68,14 +68,14 @@ namespace Binary_Decimal_Manipulation
                 Console.WriteLine(); //Aesthetically pleasing space.
                 Console.WriteLine("Now, please input your two values"); //Inform user of choices
                 Console.WriteLine("These two values must be integers"); //Specify the limits of the program
-                Console.WriteLine("Please input the first value, which should be less than 2^32, or [INFOMISSING]"); //Declare the obvious
+                Console.WriteLine("Please input the first value, which should be less than 2^32, or 4,294,967,295"); //Declare the obvious
 
                 valA = Int32.Parse(Console.ReadLine()); //Convert the input into a workable integer instead of a string, because you can't add strings.
                 Console.WriteLine("Thank You"); //Aesthetically pleasing 'thank you'
 
                 Console.WriteLine(); //Aesthetically pleasing space.
 
-                Console.WriteLine("Now, please input the second value, which should be less than 2^32, or [INFOMISSING]"); //Declare the obvious, part two.
+                Console.WriteLine("Now, please input the second value, which should be less than 2^32, or 4,294,967,295"); //Declare the obvious, part two.
                 if (subtract == 1) //If the user specified wanted to subtract, then show:
                 {
 
@@ -158,26 +158,36 @@ namespace Binary_Decimal_Manipulation
                 combineBin(ref binOutput, ref finBinOut, bitWidth, overflow, subtract); //Combine the values in binOutput and place the output into finBinOut
                 binDec(ref binOutput, ref decOutput, bitWidth, overflow); //Convert the binary output to decimal
 
+                for(int i = 0; i <= bitWidth; i++)
+                {
+
+                    Console.WriteLine(binOutput[i]);
+
+                }
+
                 Console.WriteLine(); //Aesthetically pleasing space
                 Console.WriteLine("Finished All Functions...");
-                Console.WirteLine("Binary Output is " + finBinOut); //Show final binary output
+                Console.WriteLine("Binary Output is " + finBinOut); //Show final binary output
                 Console.WriteLine("Decimal Output is " + decOutput); //Show final decimal output
                 Console.WriteLine(); //Aesthetically pleasing space
-                
+
                 Console.WriteLine("Would you like to Add/Subtract Again? (Y/n)"); //Propose a 'reset' switch
-                
-                if (Console.ReadKey() == "y") //User types wants to reset...
+
+                string resetYN = Console.ReadLine();
+
+                if (resetYN == "y" || resetYN == "Y") //User types wants to reset...
                 {
-                    
+
                     goto Reset; //Reset the program
-                    
-                } else //User either doesn't care or types in 'n'
-                {
-                 
-                    Console.WriteLine("Press any key to close the program..."); //Inform the user that they can kill the program
-                    
+
                 }
-                
+                else //User either doesn't care or types in 'n'
+                {
+
+                    Console.WriteLine("Press any key to close the program..."); //Inform the user that they can kill the program
+
+                }
+
                 Console.ReadKey();
 
             }
@@ -250,11 +260,12 @@ namespace Binary_Decimal_Manipulation
                                                                       //greater than the input value, the one before it is less, leaving us with workable (non-negative)
                                                                       //information. For example: 8 (2^3) is greater than the input 5. So, 2^2 (or 2^(3-1)) is 4, which
                                                                       //IS less than 5. So, we'll subtract 4 from 5, and be left with 1 to continue sifting through.
-                    binArray[powerOfTwo-1] = 1; //Input '1' into the necessary place
-                    Console.WriteLine("Input in place value " + (powerOfTwo-1)); //Notify user of input (just for Aesthetic)
+                    binArray[powerOfTwo - 1] = 1; //Input '1' into the necessary place
+                    Console.WriteLine("Input in place value " + (powerOfTwo - 1)); //Notify user of input (just for Aesthetic)
                     powerOfTwo = 0; //Reset the powerOfTwo variable to continue the cycle.
 
-                } else //If the inputted value is still greater than the current powerOfTwo, then:
+                }
+                else //If the inputted value is still greater than the current powerOfTwo, then:
                 {
 
                     powerOfTwo++; //Increment powerOfTwo in order to test it against the inputted value again
@@ -337,7 +348,7 @@ namespace Binary_Decimal_Manipulation
 
             output = 0; //reset output (because it remains constant throughout the program)
             carryOut = 0; //reset carryOut (because it remains constant throughout the program)
-          
+
             Console.WriteLine("Adding...");
 
             if (valA ^ valB) //Is there a carry bit w/ only A and B?
@@ -397,7 +408,8 @@ namespace Binary_Decimal_Manipulation
 
                 powerOfTwo = bitWidth - 1; //The maximum place value will be the size of the bit width
 
-            } else //If there is an overflow, then:
+            }
+            else //If there is an overflow, then:
             {
 
                 powerOfTwo = bitWidth; //The maximum place value will be the size of the bit width + 1, to accomodate the overflow
@@ -427,7 +439,7 @@ namespace Binary_Decimal_Manipulation
             if (subtract == 1 && overflow == true) //If the user chose to subtract:
             {
 
-                binOutput = -1*((int)Math.Pow(10, bitWidth) - binOutput); //I still have no idea what this does.
+                binOutput = -1 * ((int)Math.Pow(10, bitWidth) - binOutput); //I still have no idea what this does.
                 binInput[bitWidth + 1] = 0; //Set overflow to 0
 
             }
@@ -435,37 +447,39 @@ namespace Binary_Decimal_Manipulation
             Console.WriteLine("...Done");
 
         }
-        
+
         public static void binDec(ref int[] binInput, ref int decOutput, int bitWidth, bool overflow)
         {
-            
+
             //This function will convert a binary input into a decimal ouutput
             Console.WriteLine("Converting binary values into a decimal value...");
-            
+
             int powerOfTwo = 0; //powerOfTwo will store the running power that the bit will be converted to
-            
+
             if (overflow == false) //If there's no overflow, then:
             {
-             
+
                 powerOfTwo = bitWidth - 1;   //There will be no cycle for an overflow bit
-                
-            } else //Otherwise,
-            {
-                
-                powerOfTwo = bitWidth; //There will be a cycle for an overflow bit
-                
+
             }
-            
+            else //Otherwise,
+            {
+
+                powerOfTwo = bitWidth; //There will be a cycle for an overflow bit
+
+            }
+
             while (powerOfTwo > 0) //While there are still remaining cycles,
             {
-                
-                decOutput = decOutput + (binInput[powerOfTwo]*((int)Math.Pow(2,powerOfTwo))) //The decimal output
-                
+
+                decOutput = decOutput + (binInput[powerOfTwo] * ((int)Math.Pow(2, powerOfTwo))); //The decimal output
+                powerOfTwo--; //Decrement PowerOfTwo
+
             }
-            
+
             Console.WriteLine("...Done");
-            
-            
+
+
         }
 
     }
