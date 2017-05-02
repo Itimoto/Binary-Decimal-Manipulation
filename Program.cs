@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Globalization; //Using for the BigInt Data Type (specifically for NumberStyles.XXX)
+using System.Numerics; //Using for BigInt Data Type, parsing Console.ReadLine(); into a 'long' variable
 
 namespace Binary_Decimal_Manipulation
 {
@@ -19,11 +21,11 @@ namespace Binary_Decimal_Manipulation
         /*  
          *  4.30.17: Took out special case (2^0 or 1) in function decBin
         */
-        //try
-        //{
+        try
+        {
         Reset:
-            int valA = 0; //This is going to be the first value
-            int valB = 0; //This is going to be the second value; if subtracting, it will be the subtractend
+            long valA = 0; //This is going to be the first value
+            long valB = 0; //This is going to be the second value; if subtracting, it will be the subtractend
             int bitWidth = 32; //This is going to be the bit width of the adder/subtractor
 
             int[] binA = new int[bitWidth]; //This array will store the binary value of A, with the length of bit width
@@ -70,7 +72,19 @@ namespace Binary_Decimal_Manipulation
             Console.WriteLine("These two values must be integers"); //Specify the limits of the program
             Console.WriteLine("Please input the first value, which should be less than 2^32, or 4,294,967,295"); //Declare the obvious
 
-            valA = Int32.Parse(Console.ReadLine()); //Convert the input into a workable integer instead of a string, because you can't add strings.
+       inputA:
+            valA = (long)BigInteger.Parse(Console.ReadLine(), NumberStyles.Any); //Convert the input into a workable integer instead of a string, because you can't add strings.
+
+            if (valA > (long)Math.Pow(2, bitWidth - 1)) //If the value is too great (to prevent a program crash
+            {
+
+                valA = 0;
+                Console.WriteLine("ERROR: You have inputted too large a number");
+                    Console.WriteLine("Please input a value LESS THAN 2^" + bitWidth + ", or " + (Math.Pow(2, bitWidth) - 1));
+                goto inputA;
+
+            }
+
             Console.WriteLine("Thank You"); //Aesthetically pleasing 'thank you'
 
             Console.WriteLine(); //Aesthetically pleasing space.
@@ -88,8 +102,20 @@ namespace Binary_Decimal_Manipulation
 
             }
 
+        inputB:
+            valB = (long)BigInteger.Parse(Console.ReadLine(), NumberStyles.Any); //Convert input into a workable integer again, but for value B
 
-            valB = Int32.Parse(Console.ReadLine()); //Convert input into a workable integer again, but for value B
+            if (valB > (long)Math.Pow(2, bitWidth - 1)) //If the value is too great (to prevent a program crash
+            {
+                
+                valB = 0; //Reset variable value to prevent OutOfBounds Exception
+                Console.WriteLine("ERROR: You have inputted too large a number");
+                Console.WriteLine("Please input a value LESS THAN 2^32, or 4,294,967,265");
+                goto inputB; //
+
+            }
+
+
             Console.WriteLine(); //Aesthetically pleasing space.
             Console.WriteLine("Thank You"); //Aesthetically pleasing 'thank you'
 
@@ -184,17 +210,17 @@ namespace Binary_Decimal_Manipulation
 
                 Console.ReadKey();
 
-            //}
+            }
 
 
-            /*catch (Exception ex) //If a bug occurs, then:
+            catch (Exception ex) //If a bug occurs, then:
             {
 
                 Console.WriteLine("Oops! Something went wrong."); //Inform user that they should do something
                 Console.WriteLine("Press any key to close the program."); //Oh, wait; this is something.
                 Console.ReadKey();
 
-            }*/
+            }
 
 
         }
@@ -203,7 +229,7 @@ namespace Binary_Decimal_Manipulation
         //AESTHETICALLY PLEASING EMPTY SPACE (TM)
         //
 
-        public static void decBin(int inputVal, int[] binArray, int bitWidth)
+        public static void decBin(long inputVal, int[] binArray, int bitWidth)
         {
             /* This function converts a decimal input ,'inputVal', into binary and deposits each
              *  individual bit into it's respective place in the array 'binArray'
