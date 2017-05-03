@@ -28,13 +28,12 @@ namespace Binary_Decimal_Manipulation
             Console.Clear();
             long valA = 0; //This is going to be the first value
             long valB = 0; //This is going to be the second value; if subtracting, it will be the subtractend
-            int bitWidth = 32; //This is going to be the bit width of the adder/subtractor
+            int bitWidth = 25; //This is going to be the bit width of the adder/subtractor
 
             int[] binA = new int[bitWidth]; //This array will store the binary value of A, with the length of bit width
             int[] binB = new int[bitWidth]; //This array will store the binary value of B, with the lenght of bit width
             int[] binOutput = new int[bitWidth + 2]; //This array will store the binary output of the selected operation, with the length of the bit width + 2
 
-            BigInteger finBinOut = 0; //This will store the Finalized Binary Output of the adder, to be shown later; EDIT: Needed to be made a BigInt, problems w/ overflow
             int decOutput = 0; //This will store the value of the Decimal Output, shown at the very end of the program
 
             Console.WriteLine("Welcome!"); //Welcome Code
@@ -184,12 +183,11 @@ namespace Binary_Decimal_Manipulation
             }
 
             //Taking array information in binOutput and combining it into finBinOut.
-            combineBin(ref binOutput, ref finBinOut, bitWidth, overflow, subtract); //Combine the values in binOutput and place the output into finBinOut
             binDec(ref binOutput, ref decOutput, bitWidth, overflow); //Convert the binary output to decimal
 
             Console.WriteLine(); //Aesthetically pleasing space
             Console.WriteLine("Finished All Functions...");
-            Console.WriteLine("Binary Output is " + finBinOut); //Show final binary output
+            Console.WriteLine("Binary Output is " + string.Join("", binOutput)); //Show final binary output
             Console.WriteLine("Decimal Output is " + decOutput); //Show final decimal output
             Console.WriteLine(); //Aesthetically pleasing space
 
@@ -209,7 +207,7 @@ namespace Binary_Decimal_Manipulation
                     Console.WriteLine("Press any key to close the program..."); //Inform the user that they can kill the program
 
                 }
-
+               
                 Console.ReadKey();
 
             }
@@ -418,64 +416,6 @@ namespace Binary_Decimal_Manipulation
             Console.WriteLine("Out = " + output); //Show user what the output is
             Console.WriteLine("Carry Out = " + carryOut); //Show user what the carry output is
             Console.WriteLine(); //Aesthetically pleasing space
-
-        }
-
-        public static void combineBin(ref int[] binInput, ref BigInteger binOutput, int bitWidth, bool overflow, int subtract)
-        {
-
-            //This function will combine the binary values inside of the binInput array and output
-            // it inside of binOutput. The process is described more in detail further on.
-
-            Console.WriteLine("Combining Binary Values into single Variable...");
-            BigInteger subtractOverflow = 0; //This will store the value of the 'subtract overflow' variable, which will be used to dispose of an overflow val
-
-            int powerOfTwo = 0; //This variable will store the 'place value' where the given value will be deposited
-
-            if (overflow == false) //If there is no overflow, then:
-            {
-
-                powerOfTwo = bitWidth - 1; //The maximum place value will be the size of the bit width
-
-            }
-            else //If there is an overflow, then:
-            {
-
-                powerOfTwo = bitWidth; //The maximum place value will be the size of the bit width + 1, to accomodate the overflow
-
-            }
-
-            if (subtract == 1 && overflow == true)
-            {
-
-                binInput[bitWidth] = 0; //Set overflow to 0 for subtraction operations
-
-            }
-
-            while (powerOfTwo >= 0) //While all of the possible place value values haven't been placed, then:
-            {
-
-                binOutput += ((binInput[powerOfTwo]) * ((BigInteger)Math.Pow(10, (powerOfTwo))));
-                /*  Simplified version: binOutput = binOutput+(binInput[powerOfTwo]) * (10^(H-1))
-                 *  Walk through it: for example, it's taking [1,1,0,1] and wants to make it 1,011
-                 *  If the first 1 on the far left is the 0th place (or 2^0 place) then, it will take
-                 *      that and multiply it by 1 (or 10^0), and depositing it into binOutput (1+0)
-                 *  Now, take the second 1 on the far left, which is the 1st place (or 2^1 place), and 
-                 *      take that and multiply it by 10 (or 10^1), and depositing it into binOutput (10+1) 
-                 *  Now, take the 0, which is the 3rd place, which is the 2nd place (or 2^2 place), and 
-                 *      take that and multiply it by 100 (or 10^2), and depositing it into binOutput (0+10+1)
-                 *  Now, take the 1, which is in the 4th place, which is the 2^3 place, then take it and
-                 *      multiply it by 1000 (or 10^3), and deposit it into binOutput (10000+0+10+1)
-                 *  Now, print it. We'll get 1,011, exactly what we're expecting.
-                 */
-                subtractOverflow += (BigInteger)Math.Pow(10, (powerOfTwo)); //Prepares for subtracting 11111... from binOutput's overflow bit w/ subtraction on
-                powerOfTwo--; //decrement the value
-
-
-
-            }
-
-            Console.WriteLine("...Done");
 
         }
 
