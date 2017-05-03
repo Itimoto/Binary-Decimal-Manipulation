@@ -9,7 +9,7 @@ The program is capable of adding/subtracting numbers less than 2^(bitWidth) - 1.
 <p>The program will proceed with adding if you put 'no', 'No', 'n', or 'N'</p>
 <p>The program will begin to start subtracting if you put 'yes', 'Yes', 'y', or 'Y'</p>
 <p><i>Thank you. Please input values:</i></p>
-<p>For this, it depends if you're adding or subtracting. If you're adding, then the only thing that you have to worry about is that it is less than <b>2^(biitWidth) - 1</b>, or <b>4,294,967,295.</b> I've added a 'feature' that prevents you from inputting anything higher, to prevent a crash.</p>
+<p>For this, it depends if you're adding or subtracting. If you're adding, then the only thing that you have to worry about is that it is less than <b>2^(bitWidth) - 1</b>, or <b>4,294,967,295.</b> I've added a 'feature' that prevents you from inputting anything higher, to prevent a crash.</p>
 <p>If you're subtracting, then the second value that you will input will be the same as <i>-1 * (your input)</i>. Also, in this case, make sure that the second value is less than the first, as negative outputs <b>do not work well</b>, as the program uses unsigned binary. Thus, if you do this, then you will receive a well-deserved <b>faulty output.</b></p>
 <p><i>Thank you. Press any key to continue</i></p>
 <p>Now comes the fun stuff. I wrote this program to illustrate what Binary is like. I made some of the program 'stepping,' so that you can see the converted binary values of the decimal input. So, in general, the majority of the garble that comes out of the program is the result of what's going on throughout the program. I'll outline that further on in the README.</p>
