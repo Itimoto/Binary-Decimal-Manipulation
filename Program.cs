@@ -21,9 +21,11 @@ namespace Binary_Decimal_Manipulation
         /*  
          *  4.30.17: Took out special case (2^0 or 1) in function decBin
         */
+        Reset:
         try
         {
-        Reset:
+
+            Console.Clear();
             long valA = 0; //This is going to be the first value
             long valB = 0; //This is going to be the second value; if subtracting, it will be the subtractend
             int bitWidth = 32; //This is going to be the bit width of the adder/subtractor
@@ -32,7 +34,7 @@ namespace Binary_Decimal_Manipulation
             int[] binB = new int[bitWidth]; //This array will store the binary value of B, with the lenght of bit width
             int[] binOutput = new int[bitWidth + 2]; //This array will store the binary output of the selected operation, with the length of the bit width + 2
 
-            int finBinOut = 0; //This will store the Finalized Binary Output of the adder, to be shown later
+            BigInteger finBinOut = 0; //This will store the Finalized Binary Output of the adder, to be shown later; EDIT: Needed to be made a BigInt, problems w/ overflow
             int decOutput = 0; //This will store the value of the Decimal Output, shown at the very end of the program
 
             Console.WriteLine("Welcome!"); //Welcome Code
@@ -70,12 +72,12 @@ namespace Binary_Decimal_Manipulation
             Console.WriteLine(); //Aesthetically pleasing space.
             Console.WriteLine("Now, please input your two values"); //Inform user of choices
             Console.WriteLine("These two values must be integers"); //Specify the limits of the program
-            Console.WriteLine("Please input the first value, which should be less than 2^32, or 4,294,967,295"); //Declare the obvious
+            Console.WriteLine("Please input the first value, which should be less than 2^" + bitWidth + ", or " + (Math.Pow(2, bitWidth) - 1)); //Declare the obvious
 
        inputA:
             valA = (long)BigInteger.Parse(Console.ReadLine(), NumberStyles.Any); //Convert the input into a workable integer instead of a string, because you can't add strings.
 
-            if (valA > (long)Math.Pow(2, bitWidth - 1)) //If the value is too great (to prevent a program crash
+            if (valA > (long)Math.Pow(2, bitWidth)) //If the value is too great (to prevent a program crash
             {
 
                 valA = 0;
@@ -89,7 +91,7 @@ namespace Binary_Decimal_Manipulation
 
             Console.WriteLine(); //Aesthetically pleasing space.
 
-            Console.WriteLine("Now, please input the second value, which should be less than 2^32, or 4,294,967,295"); //Declare the obvious, part two.
+            Console.WriteLine("Now, please input the second value, which should be less than 2^" + bitWidth + ", or " + (Math.Pow(2, bitWidth) - 1)); //Declare the obvious, part two.
             if (subtract == 1) //If the user specified wanted to subtract, then show:
             {
 
@@ -105,13 +107,13 @@ namespace Binary_Decimal_Manipulation
         inputB:
             valB = (long)BigInteger.Parse(Console.ReadLine(), NumberStyles.Any); //Convert input into a workable integer again, but for value B
 
-            if (valB > (long)Math.Pow(2, bitWidth - 1)) //If the value is too great (to prevent a program crash
+            if (valB > (long)Math.Pow(2, bitWidth)) //If the value is too great (to prevent a program crash
             {
                 
                 valB = 0; //Reset variable value to prevent OutOfBounds Exception
                 Console.WriteLine("ERROR: You have inputted too large a number");
-                Console.WriteLine("Please input a value LESS THAN 2^32, or 4,294,967,265");
-                goto inputB; //
+                Console.WriteLine("Please input a value LESS THAN 2^" + bitWidth + ", or " + (Math.Pow(2, bitWidth) - 1));
+                goto inputB; //Reset the value-making process
 
             }
 
@@ -172,8 +174,8 @@ namespace Binary_Decimal_Manipulation
 
             }
 
-            binOutput[bitWidth + 1] = carryOut; //Possible overflow bit is stored in last place
-            if (binOutput[bitWidth + 1] == 1) //If there is overflow
+            binOutput[bitWidth] = carryOut; //Possible overflow bit is stored in last place
+            if (binOutput[bitWidth] == 1) //If there is overflow
             {
 
                 Console.WriteLine("OVERFLOW"); //Display the fact that there is overflow
@@ -217,8 +219,14 @@ namespace Binary_Decimal_Manipulation
             {
 
                 Console.WriteLine("Oops! Something went wrong."); //Inform user that they should do something
-                Console.WriteLine("Press any key to close the program."); //Oh, wait; this is something.
-                Console.ReadKey();
+                Console.WriteLine("Please type 'reset' to reset the program and try again"); //Oh, wait; this is something.
+                Console.WriteLine("If not, just press enter, or enter gibberish, 3 times for no reason.");
+                if (Console.ReadLine() == "reset" || Console.ReadLine() == "Reset" || Console.ReadLine() == "r" || Console.ReadLine() == "R")
+                {
+
+                    goto Reset; //Restart the program
+
+                }
 
             }
 
@@ -413,14 +421,14 @@ namespace Binary_Decimal_Manipulation
 
         }
 
-        public static void combineBin(ref int[] binInput, ref int binOutput, int bitWidth, bool overflow, int subtract)
+        public static void combineBin(ref int[] binInput, ref BigInteger binOutput, int bitWidth, bool overflow, int subtract)
         {
 
             //This function will combine the binary values inside of the binInput array and output
             // it inside of binOutput. The process is described more in detail further on.
 
             Console.WriteLine("Combining Binary Values into single Variable...");
-            int subtractOverflow = 0; //This will store the value of the 'subtract overflow' variable, which will be used to dispose of an overflow val
+            BigInteger subtractOverflow = 0; //This will store the value of the 'subtract overflow' variable, which will be used to dispose of an overflow val
 
             int powerOfTwo = 0; //This variable will store the 'place value' where the given value will be deposited
 
@@ -440,14 +448,14 @@ namespace Binary_Decimal_Manipulation
             if (subtract == 1 && overflow == true)
             {
 
-                binInput[bitWidth + 1] = 0; //Set overflow to 0 for subtraction operations
+                binInput[bitWidth] = 0; //Set overflow to 0 for subtraction operations
 
             }
 
             while (powerOfTwo >= 0) //While all of the possible place value values haven't been placed, then:
             {
 
-                binOutput += ((binInput[powerOfTwo]) * ((int)Math.Pow(10, (powerOfTwo))));
+                binOutput += ((binInput[powerOfTwo]) * ((BigInteger)Math.Pow(10, (powerOfTwo))));
                 /*  Simplified version: binOutput = binOutput+(binInput[powerOfTwo]) * (10^(H-1))
                  *  Walk through it: for example, it's taking [1,1,0,1] and wants to make it 1,011
                  *  If the first 1 on the far left is the 0th place (or 2^0 place) then, it will take
@@ -460,8 +468,9 @@ namespace Binary_Decimal_Manipulation
                  *      multiply it by 1000 (or 10^3), and deposit it into binOutput (10000+0+10+1)
                  *  Now, print it. We'll get 1,011, exactly what we're expecting.
                  */
-                subtractOverflow += (int)Math.Pow(10, (powerOfTwo)); //Prepares for subtracting 11111... from binOutput's overflow bit w/ subtraction on
+                subtractOverflow += (BigInteger)Math.Pow(10, (powerOfTwo)); //Prepares for subtracting 11111... from binOutput's overflow bit w/ subtraction on
                 powerOfTwo--; //decrement the value
+
 
 
             }
@@ -481,13 +490,13 @@ namespace Binary_Decimal_Manipulation
             if (overflow == false) //If there's no overflow, then:
             {
 
-                powerOfTwo = bitWidth - 1;   //There will be no cycle for an overflow bit
+                powerOfTwo = bitWidth;   //There will be no cycle for an overflow bit
 
             }
             else //Otherwise,
             {
 
-                powerOfTwo = bitWidth; //There will be a cycle for an overflow bit
+                powerOfTwo = bitWidth + 1; //There will be a cycle for an overflow bit
 
             }
 
