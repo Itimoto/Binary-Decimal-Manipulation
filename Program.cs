@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,7 +28,7 @@ namespace Binary_Decimal_Manipulation
             Console.Clear();
             long valA = 0; //This is going to be the first value
             long valB = 0; //This is going to be the second value; if subtracting, it will be the subtractend
-            int bitWidth = 25; //This is going to be the bit width of the adder/subtractor
+            int bitWidth = 32; //This is going to be the bit width of the adder/subtractor
 
             int[] binA = new int[bitWidth]; //This array will store the binary value of A, with the length of bit width
             int[] binB = new int[bitWidth]; //This array will store the binary value of B, with the lenght of bit width
@@ -179,6 +179,13 @@ namespace Binary_Decimal_Manipulation
 
                 Console.WriteLine("OVERFLOW"); //Display the fact that there is overflow
                 overflow = true; //Set overflow boolean for use with combinBin();
+
+            }
+
+            if (subtract == 1 && overflow == true) //Preventing overflow bit corruption (i.e. 9-6 != 19, which is 11001 (so we're getting rid of the overflow bit to get 11)
+            {
+
+                binOutput[bitWidth] = 0; //Getting rid of overflow
 
             }
 
