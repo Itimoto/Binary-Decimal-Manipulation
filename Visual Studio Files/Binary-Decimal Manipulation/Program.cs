@@ -182,6 +182,13 @@ namespace Binary_Decimal_Manipulation
 
             }
 
+            if (subtract == 1 && overflow == true) //Preventing overflow bit corruption (i.e. 9-6 != 19, which is 11001 (so we're getting rid of the overflow bit to get 11)
+            {
+
+                binOutput[bitWidth] = 0; //Getting rid of overflow
+
+            }
+
             //Taking array information in binOutput and combining it into finBinOut.
             binDec(ref binOutput, ref decOutput, bitWidth, overflow); //Convert the binary output to decimal
 
